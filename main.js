@@ -1,49 +1,82 @@
-document.addEventListener("DOMContentLoaded", () => {
-    const modal = document.getElementById("imageModal");
-    const modalImg = document.getElementById("modalImg");
-    const modalCaption = document.getElementById("modalCaption");
-    const closeBtn = document.querySelector(".close-btn");
+// Modal functionality for teacher album
+document.addEventListener('DOMContentLoaded', function() {
+    const modal = document.getElementById('imageModal');
+    const modalImg = document.getElementById('modalImg');
+    const modalCaption = document.getElementById('modalCaption');
+    const closeBtn = document.querySelector('.close-btn');
+    const cards = document.querySelectorAll('.card');
 
-    // Sahifadagi barcha kartochkalarni olish
-    const cards = document.querySelectorAll(".card");
-
+    // Open modal when clicking on a card
     cards.forEach(card => {
-        card.addEventListener("click", function() {
-            // Modalni ochish
-            modal.style.display = "block";
-            
-            // Rasmni manbasini olish
-            const clickedImg = this.querySelector("img");
-            modalImg.src = clickedImg.src;
+        card.addEventListener('click', function() {
+            const img = this.querySelector('img');
+            const name = this.querySelector('.name, .info p');
+            const title = this.querySelector('.info h3');
 
-            // Ismni olish (h3 yoki p dan)
-            const nameText = this.querySelector("p")?.innerText || 
-                             this.querySelector("h3")?.innerText;
-            modalCaption.innerText = nameText;
-            
-            // Animatsiya: Rasm o'sib chiqishi uchun
-            modalImg.style.transform = "scale(0.8)";
-            setTimeout(() => {
-                modalImg.style.transition = "transform 0.3s ease";
-                modalImg.style.transform = "scale(1)";
-            }, 10);
+            if (img) {
+                modalImg.src = img.src;
+                modalImg.alt = img.alt;
+
+                // Set caption based on card type
+                if (title && name) {
+                    modalCaption.textContent = title.textContent + ' - ' + name.textContent;
+                } else if (name) {
+                    modalCaption.textContent = name.textContent;
+                } else {
+                    modalCaption.textContent = img.alt;
+                }
+
+                modal.classList.add('active');
+                document.body.style.overflow = 'hidden'; // Prevent scrolling
+            }
         });
     });
 
-    // Yopish tugmasi mantiqi
-    closeBtn.onclick = () => {
-        modal.style.display = "none";
-    };
+    // Close modal when clicking the close button
+    closeBtn.addEventListener('click', function() {
+        closeModal();
+    });
 
-    // Modal atrofini (qora fonni) bosganda yopilish
-    modal.onclick = (e) => {
-        if (e.target === modal || e.target.classList.contains('modal-body')) {
-            modal.style.display = "none";
+    // Close modal when clicking outside the image
+    modal.addEventListener('click', function(e) {
+        if (e.target === modal) {
+            closeModal();
         }
-    };
+    });
 
-    // ESC tugmasini bosganda yopilish
-    document.addEventListener("keydown", (e) => {
-        if (e.key === "Escape") modal.style.display = "none";
+    // Close modal with Escape key
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape' && modal.classList.contains('active')) {
+            closeModal();
+        }
+    });
+
+    function closeModal() {
+        modal.classList.remove('active');
+        document.body.style.overflow = ''; // Restore scrolling
+        modalImg.src = '';
+    }
+
+    // Smooth scroll behavior for better UX
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function(e) {
+            e.preventDefault();
+            const target = document.querySelector(this.getAttribute('href'));
+            if (target) {
+                target.scrollIntoView({
+                    behavior: 'smooth'
+                });
+            }
+        });
+    });
+
+    // Add loading animation for images
+    const images = document.querySelectorAll('.card img');
+    images.forEach(img => {
+        img.addEventListener('load', function() {
+            this.style.opacity = '1';
+        });
+        img.style.opacity = '0';
+        img.style.transition = 'opacity 0.3s ease';
     });
 });
