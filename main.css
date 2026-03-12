@@ -5,10 +5,47 @@
     font-family: 'Georgia', serif;
 }
 
+/* YouTube Video Background */
+.video-background {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+    overflow: hidden;
+}
+
+.video-background iframe {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 100vw;
+    height: 100vh;
+    transform: translate(-50%, -50%);
+    min-width: 100%;
+    min-height: 100%;
+    object-fit: cover;
+    pointer-events: none;
+}
+
+/* Transparent Overlay - Light Vignette Effect */
+.video-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(ellipse at center, rgba(0, 0, 0, 0.1) 0%, rgba(0, 0, 0, 0.3) 70%, rgba(0, 0, 0, 0.5) 100%);
+    z-index: 1;
+}
+
 body {
-    background: radial-gradient(circle, #1a1a1a 0%, #050505 100%);
+    background: transparent;
     color: #e6c26b;
     padding: 20px;
+    min-height: 100vh;
+    position: relative;
 }
 
 .album-container {
@@ -16,7 +53,9 @@ body {
     margin: 0 auto;
     border: 5px double #c9a14a;
     padding: 40px;
-    background: rgba(255, 255, 255, 0.02);
+    background: transparent;
+    position: relative;
+    z-index: 2;
 }
 
 h1 {
@@ -24,6 +63,7 @@ h1 {
     font-size: 3rem;
     letter-spacing: 5px;
     text-shadow: 2px 2px 10px rgba(201, 161, 74, 0.5);
+    color: #e6c26b;
 }
 
 .year-badge {
@@ -31,6 +71,7 @@ h1 {
     font-size: 1.2rem;
     margin-bottom: 40px;
     color: #fff;
+    text-shadow: 1px 1px 5px rgba(0, 0, 0, 0.8);
 }
 
 .gold-line {
@@ -43,7 +84,7 @@ h1 {
 /* Kartochkalar dizayni */
 .card {
     border: 2px solid #c9a14a;
-    background: #111;
+    background: rgba(0, 0, 0, 0.4);
     overflow: hidden;
     transition: transform 0.3s ease, box-shadow 0.3s ease;
     cursor: pointer;
@@ -51,7 +92,7 @@ h1 {
 
 .card:hover {
     transform: translateY(-5px);
-    box-shadow: 0 10px 20px rgba(201, 161, 74, 0.3);
+    box-shadow: 0 10px 30px rgba(201, 161, 74, 0.5);
 }
 
 .card img {
@@ -67,8 +108,23 @@ h1 {
     gap: 30px;
 }
 
-.main-card img { height: 350px; }
-.info { padding: 15px; text-align: center; }
+.main-card img {
+    height: 350px;
+}
+
+.info {
+    padding: 15px;
+    text-align: center;
+}
+
+.info h3 {
+    color: #e6c26b;
+    margin-bottom: 5px;
+}
+
+.info p {
+    color: #fff;
+}
 
 /* Umumiy o'qituvchilar Grid */
 .teachers-grid {
@@ -77,12 +133,16 @@ h1 {
     gap: 20px;
 }
 
-.small-card img { height: 220px; }
+.small-card img {
+    height: 220px;
+}
+
 .name {
     padding: 8px;
     text-align: center;
     font-size: 14px;
-    background: #000;
+    background: rgba(0, 0, 0, 0.5);
+    color: #e6c26b;
 }
 
 /* MODAL EFFEKTI */
@@ -94,8 +154,14 @@ h1 {
     top: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(0,0,0,0.95);
+    background-color: rgba(0, 0, 0, 0.95);
     backdrop-filter: blur(8px);
+}
+
+.modal.active {
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .modal-body {
@@ -105,6 +171,7 @@ h1 {
     align-items: center;
     justify-content: center;
     height: 100%;
+    padding: 20px;
 }
 
 #modalImg {
@@ -118,6 +185,7 @@ h1 {
     margin-top: 20px;
     color: #e6c26b;
     font-size: 2rem;
+    text-align: center;
 }
 
 .close-btn {
@@ -127,10 +195,321 @@ h1 {
     color: #fff;
     font-size: 60px;
     cursor: pointer;
+    transition: color 0.3s ease;
+    z-index: 2001;
 }
 
-/* Mobil moslashuv */
-@media (max-width: 768px) {
-    .teachers-grid { grid-template-columns: repeat(2, 1fr); }
-    .top-section { grid-template-columns: 1fr 1fr; }
+.close-btn:hover {
+    color: #e6c26b;
+}
+
+/* ========== RESPONSIVE DESIGN ========== */
+
+/* Large Desktop (1920px and above) */
+@media (min-width: 1920px) {
+    .album-container {
+        max-width: 1800px;
+        padding: 60px;
+    }
+
+    h1 {
+        font-size: 4rem;
+    }
+
+    .year-badge {
+        font-size: 1.5rem;
+    }
+
+    .top-section {
+        grid-template-columns: repeat(4, 1fr);
+        gap: 40px;
+    }
+
+    .main-card img {
+        height: 450px;
+    }
+
+    .teachers-grid {
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+        gap: 25px;
+    }
+
+    .small-card img {
+        height: 280px;
+    }
+}
+
+/* Desktop (1200px - 1919px) */
+@media (min-width: 1200px) and (max-width: 1919px) {
+    .top-section {
+        grid-template-columns: repeat(4, 1fr);
+    }
+}
+
+/* Laptop (992px - 1199px) */
+@media (min-width: 992px) and (max-width: 1199px) {
+    .album-container {
+        padding: 30px;
+    }
+
+    h1 {
+        font-size: 2.5rem;
+    }
+
+    .top-section {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .main-card img {
+        height: 300px;
+    }
+
+    .teachers-grid {
+        grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    }
+
+    .small-card img {
+        height: 200px;
+    }
+}
+
+/* Tablet (768px - 991px) */
+@media (min-width: 768px) and (max-width: 991px) {
+    body {
+        padding: 15px;
+    }
+
+    .album-container {
+        padding: 25px;
+        border-width: 3px;
+    }
+
+    h1 {
+        font-size: 2rem;
+        letter-spacing: 3px;
+    }
+
+    .year-badge {
+        font-size: 1rem;
+        margin-bottom: 30px;
+    }
+
+    .top-section {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 20px;
+    }
+
+    .main-card img {
+        height: 280px;
+    }
+
+    .teachers-grid {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 15px;
+    }
+
+    .small-card img {
+        height: 180px;
+    }
+
+    .close-btn {
+        top: 20px;
+        right: 30px;
+        font-size: 45px;
+    }
+
+    #modalCaption {
+        font-size: 1.5rem;
+    }
+}
+
+/* Mobile Large (576px - 767px) */
+@media (min-width: 576px) and (max-width: 767px) {
+    body {
+        padding: 10px;
+    }
+
+    .album-container {
+        padding: 20px;
+        border-width: 3px;
+    }
+
+    h1 {
+        font-size: 1.6rem;
+        letter-spacing: 2px;
+    }
+
+    .year-badge {
+        font-size: 0.9rem;
+        margin-bottom: 25px;
+    }
+
+    .top-section {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 15px;
+    }
+
+    .main-card img {
+        height: 220px;
+    }
+
+    .info {
+        padding: 10px;
+    }
+
+    .info h3 {
+        font-size: 1rem;
+    }
+
+    .info p {
+        font-size: 0.85rem;
+    }
+
+    .teachers-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 12px;
+    }
+
+    .small-card img {
+        height: 160px;
+    }
+
+    .name {
+        font-size: 12px;
+        padding: 6px;
+    }
+
+    .gold-line {
+        margin: 25px 0;
+    }
+
+    .close-btn {
+        top: 15px;
+        right: 20px;
+        font-size: 40px;
+    }
+
+    #modalCaption {
+        font-size: 1.2rem;
+    }
+}
+
+/* Mobile Small (575px and below) */
+@media (max-width: 575px) {
+    body {
+        padding: 8px;
+    }
+
+    .album-container {
+        padding: 15px;
+        border-width: 2px;
+    }
+
+    h1 {
+        font-size: 1.3rem;
+        letter-spacing: 1px;
+    }
+
+    .year-badge {
+        font-size: 0.8rem;
+        margin-bottom: 20px;
+    }
+
+    .top-section {
+        grid-template-columns: 1fr;
+        gap: 15px;
+    }
+
+    .main-card img {
+        height: 280px;
+    }
+
+    .info {
+        padding: 12px;
+    }
+
+    .info h3 {
+        font-size: 1.1rem;
+    }
+
+    .info p {
+        font-size: 0.9rem;
+    }
+
+    .teachers-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 10px;
+    }
+
+    .small-card img {
+        height: 140px;
+    }
+
+    .name {
+        font-size: 11px;
+        padding: 5px;
+    }
+
+    .gold-line {
+        margin: 20px 0;
+    }
+
+    .close-btn {
+        top: 10px;
+        right: 15px;
+        font-size: 35px;
+    }
+
+    #modalCaption {
+        font-size: 1rem;
+        margin-top: 15px;
+    }
+
+    #modalImg {
+        border-width: 2px;
+    }
+}
+
+/* Extra Small Mobile (375px and below) */
+@media (max-width: 375px) {
+    h1 {
+        font-size: 1.1rem;
+    }
+
+    .main-card img {
+        height: 240px;
+    }
+
+    .small-card img {
+        height: 120px;
+    }
+
+    .name {
+        font-size: 10px;
+    }
+}
+
+/* Landscape Orientation for Mobile */
+@media (max-height: 500px) and (orientation: landscape) {
+    .video-background iframe {
+        width: 100vw;
+        height: 100vh;
+    }
+
+    .main-card img {
+        height: 180px;
+    }
+
+    .small-card img {
+        height: 120px;
+    }
+
+    .modal-body {
+        flex-direction: row;
+        gap: 20px;
+    }
+
+    #modalImg {
+        max-height: 70vh;
+    }
 }
